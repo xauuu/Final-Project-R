@@ -1,0 +1,56 @@
+.about {
+  position: relative;
+}
+
+.about canvas {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.about .logo {
+  width: auto;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+}
+
+.about .logo img {
+  height: 100%;
+}
+
+.about .title {
+  padding-top: 10px;
+  text-align: center;
+}
+
+.about .title h2 {
+  font-size: 40px;
+  font-family:arial black;
+
+  background-image: 
+    linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet, red); 
+  -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;  
+  animation: rainbow-animation 60s linear infinite;
+  
+}
+
+.about .title h3 {
+  line-height: 0;
+  font-size: 30px;
+  color: blue;
+}
+
+.about .title div {
+  font-size: 20px;
+  color: blue;
+}
+
+
+@keyframes rainbow-animation {
+    to {
+        background-position: 4500vh;
+    }
+}

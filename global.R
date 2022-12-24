@@ -2,7 +2,6 @@ rm(list = ls())
 
 library(shiny)
 library(shinydashboard)
-library(shinydashboardPlus)
 library(DT)
 library(dplyr)
 library(tidyverse)

@@ -26,35 +26,47 @@ dashboardPage(
   ),
   dashboardBody(
     tags$head(
-      tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+      tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
     ),
     tags$script(HTML("$('body').addClass('fixed');")),
     tabItems(
       #Group tab content
-      tabItem(tabName = "group",
-              fluidRow(
-                h3("Stroke Analysis")
-              ),
-              fluidRow(
-                infoBox("19IT1",
-                        "Tran Quang Dat",
-                        "19IT006",
-                        icon = icon("snowflake")),
-                infoBox(
-                  "19IT1",
-                  "Nguyen Van An",
-                  "19IT001",
-                  icon = icon("pagelines"),
-                  color = "olive",
-                ),
-                infoBox(
-                  "19IT1",
-                  "Ngo Thi Huong Giang",
-                  "19IT008",
-                  icon = icon("wand-magic-sparkles"),
-                  color = "purple"
-                ),
-              )),
+      tabItem(
+        tabName = "group",
+        tags$div(
+          class = "about",
+          id = "about",
+          tags$canvas(id = "canvas"),
+          tags$div(class = "logo",
+                   tags$img(src = "vku.png")),
+          tags$div(
+            class = "title",
+            tags$h2("Data Analysis with R"),
+            tags$h3("Topic: Stroke Analysis"),
+            tags$div("Group 11")
+          ),
+          fluidRow(
+            infoBox("19IT1",
+                    "Tran Quang Dat",
+                    "19IT006",
+                    icon = icon("snowflake")),
+            infoBox(
+              "19IT1",
+              "Nguyen Van An",
+              "19IT001",
+              icon = icon("pagelines"),
+              color = "olive",
+            ),
+            infoBox(
+              "19IT1",
+              "Ngo Thi Huong Giang",
+              "19IT008",
+              icon = icon("wand-magic-sparkles"),
+              color = "purple"
+            ),
+          )
+        ),
+      ),
       # Dataset tab content
       tabItem(
         tabName = "data",
@@ -247,6 +259,7 @@ dashboardPage(
           )
         )
       )
-    )
+    ),
+  tags$script(src = "app.js")
   )
 )
