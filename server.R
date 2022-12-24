@@ -83,7 +83,37 @@ function(input, output) {
     )
   })
   
+  output$t3_table <- DT::renderDataTable({
+    datatable(df_num, options = list(scrollX = TRUE))
+  })
+  
+  output$t3_str <- renderPrint({
+    str(df_num)
+  })
+  
   output$modal_summary <- renderPrint({
     summary(model)
+  })
+  
+  output$equationLogistic <- renderUI({
+    text = extract_eq(
+      model,
+      use_coefs = TRUE,
+      # display coefficients
+      wrap = TRUE,
+      # multiple lines
+      terms_per_line = 5
+    )
+    withMathJax(tags$p(text))
+  })
+  
+  output$t3_test <- renderPrint({
+    confusionMatrix(pred_glm, as.factor(test$stroke))
+  })
+  
+  output$t3_rocr <- renderPlot({
+    pred <- prediction(pred_test, test$stroke)
+    perf <- performance(pred, "tpr", "fpr")
+    plot(perf, colorize=TRUE)
   })
 }

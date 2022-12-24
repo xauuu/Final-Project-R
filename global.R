@@ -1,11 +1,17 @@
+rm(list = ls())
+
 library(shiny)
 library(shinydashboard)
+library(shinydashboardPlus)
 library(DT)
 library(dplyr)
 library(tidyverse)
 library(gridExtra)
 library(wesanderson)
 library(corrplot)
+library(caret)
+library(ROCR)
+library(equatiomatic)
 
 df <- read.csv('dataset.csv')
 # remove outlier values
@@ -140,31 +146,37 @@ g1_stroke <-
         legend.position = "None") +
   labs(y = "Count", x = "Stroke", title = "Stroke Distribution")
 
-g1_age <- ggplot(df_copy) + 
-  geom_histogram(data = df_copy, 
-                 aes(x = age), 
-                 binwidth = , 
-                 fill = wes_palette("IsleofDogs1")[1], color = "gray") + 
-  theme_minimal() + 
+g1_age <- ggplot(df_copy) +
+  geom_histogram(
+    data = df_copy,
+    aes(x = age),
+    fill = wes_palette("IsleofDogs1")[1],
+    color = "gray"
+  ) +
+  theme_minimal() +
   theme(plot.title = element_text(size = 15, face = "bold")) +
   labs(y = "Count", x = "Age (years)", title = "Age Distribution")
 
-g1_bmi <- ggplot(df_copy) + 
-  geom_histogram(data = df_copy, 
-                 aes(x = bmi), 
-                 binwidth = , 
-                 fill = wes_palette("IsleofDogs1")[1], color = "gray") + 
-  theme_minimal() + 
+g1_bmi <- ggplot(df_copy) +
+  geom_histogram(
+    data = df_copy,
+    aes(x = bmi),
+    fill = wes_palette("IsleofDogs1")[1],
+    color = "gray"
+  ) +
+  theme_minimal() +
   theme(plot.title = element_text(size = 15, face = "bold")) +
   labs(y = "Count", x = "BMI", title = "BMI Distribution")
 
 g1_glu <-
-  ggplot(df_copy) + 
-  geom_histogram(data = df_copy, 
-                 aes(x = avg_glucose_level), 
-                 binwidth = , 
-                 fill = wes_palette("IsleofDogs1")[1], color = "gray") + 
-  theme_minimal() + 
+  ggplot(df_copy) +
+  geom_histogram(
+    data = df_copy,
+    aes(x = avg_glucose_level),
+    fill = wes_palette("IsleofDogs1")[1],
+    color = "gray"
+  ) +
+  theme_minimal() +
   theme(plot.title = element_text(size = 15, face = "bold")) +
   labs(y = "Count", x = "Average Glucose Level", title = "Average Glucose Level Distribution")
 
@@ -312,13 +324,15 @@ g2_work <-
 tbg2_residence <-
   df_copy %>% group_by(Residence_type) %>% count(stroke) %>% mutate(pct = prop.table(n))
 g2_residence <-
-  ggplot(tbg2_residence,
-         aes(
-           x = Residence_type,
-           y = pct,
-           fill = as.factor(stroke),
-           label = scales::percent(pct)
-         )) +
+  ggplot(
+    tbg2_residence,
+    aes(
+      x = Residence_type,
+      y = pct,
+      fill = as.factor(stroke),
+      label = scales::percent(pct)
+    )
+  ) +
   geom_col(position = 'dodge') +
   geom_text(position = position_dodge(width = .9),
             vjust = -0.5,
@@ -332,40 +346,54 @@ g2_residence <-
        fill = "Stroke") +
   scale_y_continuous(labels = scales::percent)
 
+
 #Modal
 #Data preprocessing
 df_num <- data.frame(df_copy)
-df_num$ever_married = str_replace_all(df_num$ever_married, c("Yes"="1", "No"="0"))
+df_num$ever_married = str_replace_all(df_num$ever_married, c("Yes" = "1", "No" =
+                                                               "0"))
 df_num$ever_married = as.numeric(df_num$ever_married)
 
-df_num$gender = str_replace_all(df_num$gender, c("Male"="1", "Female"="2"))
+df_num$gender = str_replace_all(df_num$gender, c("Male" = "1", "Female" =
+                                                   "2"))
 df_num$gender = as.numeric(df_num$gender)
 
-df_num$work_type = str_replace_all(df_num$work_type, c("Never_worked"="0","children"="1", "Private"="2", "Self-employed"="3", "Govt_job"="4"))
+df_num$work_type = str_replace_all(
+  df_num$work_type,
+  c(
+    "Never_worked" = "0",
+    "children" = "1",
+    "Private" = "2",
+    "Self-employed" = "3",
+    "Govt_job" = "4"
+  )
+)
 df_num$work_type = as.numeric(df_num$work_type)
 
-df_num$Residence_type = str_replace_all(df_num$Residence_type, c("Rural"="1", "Urban"="2"))
+df_num$Residence_type = str_replace_all(df_num$Residence_type, c("Rural" =
+                                                                   "1", "Urban" = "2"))
 df_num$Residence_type = as.numeric(df_num$Residence_type)
 
 df_num$stroke = as.numeric(as.character(df_num$stroke))
 
 df_num$smoking_status = as.numeric(df_num$smoking_status)
 
-drop_smoke<-c("smoking_status","id")
-df_num <- df_num[,!(names(df_num) %in% drop_smoke)]
-
-
-drop <- c("id","gender", "Residence_type")
+drop <- c("id")
 df_num = df_num[,!(names(df_num) %in% drop)]
 
-# shuffle index
+# Splitting our dataset into 20%, 80% testing and training
 set.seed(42)
-rows<-sample(nrow(df_num))
-df_shuffled<-df_num[rows,]
+to_take <- floor(0.8 * nrow(df_num))
+train_idx_1 <- sample(seq_len(nrow(df_num)), size = to_take)
 
 # split Train data and test data
-train <- df_shuffled[1:4000,]
-test <- df_shuffled[4001:4908,]
+train <- df_num[train_idx_1,]
+test <- df_num[-train_idx_1,]
 
 # apply model
-model <- glm(stroke ~., family=binomial(link='logit'), data=train)
+model <-
+  glm(stroke ~ ., family = binomial(link = 'logit'), data = train)
+
+pred_test <- predict(model, test, type = 'response')
+
+pred_glm = as.factor(ifelse(pred_test > 0.5, "1", "0"))

@@ -17,7 +17,11 @@ dashboardPage(
         tabName = "eda",
         icon = icon("chart-simple")
       ),
-      menuItem("Logistic Regression", tabName = "lr", icon = icon("medal"))
+      menuItem(
+        "Logistic Regression",
+        tabName = "lr",
+        icon = icon("medal")
+      )
     )
   ),
   dashboardBody(
@@ -28,6 +32,9 @@ dashboardPage(
     tabItems(
       #Group tab content
       tabItem(tabName = "group",
+              fluidRow(
+                h3("Stroke Analysis")
+              ),
               fluidRow(
                 infoBox("19IT1",
                         "Tran Quang Dat",
@@ -94,79 +101,65 @@ dashboardPage(
         tabName = "categorial",
         fluidRow(
           box(
-            width = 4,
-            plotOutput("g1_gender"),
+            width = 3,
+            plotOutput("g1_gender", height = 300),
             tags$p(
               "There are more Female patients than Male. The one entry that was stated as Other was added to the Female section since majority are female patients."
             )
           ),
           box(
-            width = 4,
-            plotOutput("g1_married"),
+            width = 3,
+            plotOutput("g1_married", height = 300),
             tags$p(
               "Roughly double the amount of patients have been married before than those who have not."
             )
           ),
           box(
-            width = 4,
-            plotOutput("g1_residence"),
+            width = 3,
+            plotOutput("g1_residence", height = 300),
             tags$p(
               "The patients are nearly evenly distributed between rural and urban residences"
             )
-          )
-        ),
-        fluidRow(
-          box(
-            width = 4,
-            plotOutput("g1_hyper"),
-            tags$p(
-              "The number of patients without hypertension is vastly greater than the number of patients with hypertension, but the gap is slightly less than the gap seen for stroke victims."
-            )
           ),
           box(
-            width = 4,
-            plotOutput("g1_heart"),
+            width = 3,
+            plotOutput("g1_heart", height = 300),
             tags$p(
               "The gap between patients with and without heart disease more closely resembles the gap between those with and without strokes."
             )
           ),
           box(
-            width = 4,
-            plotOutput("g1_stroke"),
+            width = 3,
+            plotOutput("g1_hyper", height = 300),
+            tags$p(
+              "The number of patients without hypertension is vastly greater than the number of patients with hypertension, but the gap is slightly less than the gap seen for stroke victims."
+            )
+          ),
+          box(
+            width = 3,
+            plotOutput("g1_stroke", height = 300),
             tags$p(
               "The number of patients who have not had strokes is vastly greater than the number of patients who have."
             ),
           ),
+          box(width = 6,
+              plotOutput("g1_age"),
+              tags$p("")),
+          box(width = 6,
+              plotOutput("g1_bmi"),
+              tags$p("")),
+          box(width = 6,
+              plotOutput("g1_glu"),
+              tags$p("")),
           box(
-            width = 12,
-            plotOutput("g1_age"),
-            tags$p(
-              ""
-            )
-          ),
-          box(
-            width = 12,
-            plotOutput("g1_bmi"),
-            tags$p(
-              ""
-            )
-          ),
-          box(
-            width = 12,
-            plotOutput("g1_glu"),
-            tags$p(
-              ""
-            )
-          ),
-          box(
-            width = 12,
+            width = 6,
             plotOutput("g1_work"),
             tags$p(
               "There are approximately even amounts of patients that are working government jobs, are self-employed, and are children. The majority of patients work for private companies, and a small number have never worked."
             )
           ),
           box(
-            width = 12,
+            width = 6,
             plotOutput("g1_smoking"),
             tags$p(
               "The unknown data was randomly added to the three categories above based of the probability. Most patients have either never smoked. The data for formerly and currently smokers are similar."
@@ -176,56 +169,84 @@ dashboardPage(
       ),
       tabItem(tabName = "eda",
               fluidRow(
-                column(
+                box(
                   width = 6,
-                  box(
-                    width = 12,
-                    plotOutput("g2_gender"),
-                    tags$p(
-                      "We can see from the plots that the gender is not a feature that descriminate a person having a stroke or not."
-                    )
-                  ),
-                  box(width = 12, plotOutput("g2_hyper"),
-                      tags$p("")),
-                  box(
-                    width = 12,
-                    plotOutput("g2_smoking"),
-                    tags$p(
-                      "Surprisingly, it seems that the stroke is not highly corralated to smokers since the proportion of person having a stroke is fairly the same among the different smoking status."
-                    )
-                  ),
-                  box(width = 12, plotOutput("g2_married"),
-                      tags$p("")),
+                  plotOutput("g2_gender"),
+                  tags$p(
+                    "We can see from the plots that the gender is not a feature that descriminate a person having a stroke or not."
+                  )
                 ),
-                column(
+                box(
                   width = 6,
-                  box(width = 12, plotOutput("g2_residence"),
-                      tags$p("Residence Type has nothing to do with stroke")),
-                  
-                  box(width = 12, plotOutput("g2_heart"),
-                      tags$p("")),
-                  box(
-                    width = 12,
-                    plotOutput("g2_work"),
-                    tags$p(
-                      "In term of proportion private and self-employed have the similar amount of people having a stroke. However people from the gouvernment are more likely to not have a stroke compared to both first gategories moreover chlidren are not very likekly to get a stroke. Maybe that could be explain due to the degree of pressure felt by workers"
-                    )
-                  ),
+                  plotOutput("g2_married"),
+                  tags$p(
+                    "The graphs show that married people have a higher rate of stroke than those who are not..."
+                  )
+                ),
+                box(
+                  width = 6,
+                  plotOutput("g2_residence"),
+                  tags$p(
+                    "There are not many differences in these two graphs for residence type. Perhaps, this variable can be insignificant."
+                  )
+                ),
+                box(
+                  width = 6,
+                  plotOutput("g2_hyper"),
+                  tags$p(
+                    "Blood pressure that is higher than normal is called hypertension. The graph shows that people with high blood pressure have a higher rate of stroke than people without the disease."
+                  )
+                ),
+                box(
+                  width = 6,
+                  plotOutput("g2_heart"),
+                  tags$p(
+                    "The graphs show that people with heart disease have a higher rate of stroke than people without the disease."
+                  )
+                ),
+                box(
+                  width = 6,
+                  plotOutput("g2_smoking"),
+                  tags$p(
+                    "The 'formerly smoked' and 'smokes' percentages are slightly higher in the stroke = 1 data."
+                  )
+                ),
+                box(
+                  width = 6,
+                  plotOutput("g2_work"),
+                  tags$p(
+                    "In term of proportion private and self-employed have the similar amount of people having a stroke. However people from the gouvernment are more likely to not have a stroke compared to both first gategories moreover chlidren are not very likekly to get a stroke. Maybe that could be explain due to the degree of pressure felt by workers"
+                  )
                 ),
                 
               )),
-      tabItem(tabName = "lr",
-              h2("Logistic Regression"),
-              fluidRow(
-                column(
-                  width = 6,
-                  plotOutput("g_corrplot")
-                ),
-                column(
-                  width = 6,
-                  verbatimTextOutput("modal_summary")
-                )
-              ))
+      tabItem(
+        tabName = "lr",
+        h2("Logistic Regression"),
+        fluidRow(
+          box(
+            width = 12,
+            title = "Data preprocessing",
+            verbatimTextOutput("t3_str")
+          ),
+          box(width = 12,
+              dataTableOutput("t3_table")),
+          box(
+            width = 12,
+            title = "Model Summary",
+            verbatimTextOutput("modal_summary"),
+            uiOutput("equationLogistic"),
+          ),
+          box(
+            width = 12,
+            title = "Model Evaluation",
+            column(width = 6,
+                   verbatimTextOutput("t3_test")),
+            column(width = 6,
+                   plotOutput("t3_rocr")),
+          )
+        )
+      )
     )
   )
 )
