@@ -3,7 +3,7 @@ dashboardPage(
   dashboardHeader(title = "Stroke Analysis"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Group 11", tabName = "group", icon = icon("user-group")),
+      menuItem("About", tabName = "group", icon = icon("house")),
       menuItem("Dataset",
                tabName = "data",
                icon = icon("database")),
@@ -15,7 +15,7 @@ dashboardPage(
       menuItem(
         "Exploratory Data Analysis",
         tabName = "eda",
-        icon = icon("chart-simple")
+        icon = icon("chart-pie")
       ),
       menuItem(
         "Logistic Regression",
@@ -46,10 +46,6 @@ dashboardPage(
             tags$div("Group 11")
           ),
           fluidRow(
-            infoBox("19IT1",
-                    "Tran Quang Dat",
-                    "19IT006",
-                    icon = icon("snowflake")),
             infoBox(
               "19IT1",
               "Nguyen Van An",
@@ -57,6 +53,10 @@ dashboardPage(
               icon = icon("pagelines"),
               color = "olive",
             ),
+            infoBox("19IT1",
+                    "Tran Quang Dat",
+                    "19IT006",
+                    icon = icon("snowflake")),
             infoBox(
               "19IT1",
               "Ngo Thi Huong Giang",
@@ -99,12 +99,31 @@ dashboardPage(
           tabPanel("Data", dataTableOutput("dataT"), icon = icon("table")),
           tabPanel(
             "Structure",
-            verbatimTextOutput("structure"),
+            fluidRow(
+              column(
+                width = 12,
+                verbatimTextOutput("structure"),
+                tags$p("Attribute Information"),
+                tags$ul(
+                  tags$li("gender: Male, Female"),
+                  tags$li("age: age of the patient"),
+                  tags$li("hypertension: 0 if the patient doesn't have hypertension, 1 if the patient has hypertension"),
+                  tags$li("heart_disease: 0 if the patient doesn't have any heart diseases, 1 if the patient has a heart disease"),
+                  tags$li("ever_married: No or Yes"),
+                  tags$li("work_type: children, Govt_jov, Never_worked, Private, Self-employed"),
+                  tags$li("Residence_type: Rural or Urban"),
+                  tags$li("avg_glucose_level: average glucose level in blood"),
+                  tags$li("bmi: body mass index"),
+                  tags$li("smoking_status: formerly smoked, never smoked, smokes or Unknown"),
+                  tags$li("stroke: 1 if the patient had a stroke or 0 if not")
+                )
+              )
+            ),
             icon = icon("uncharted")
           ),
           tabPanel("Summary",
                    verbatimTextOutput("summary"),
-                   icon = icon("chart-pie"))
+                   icon = icon("pen-to-square"))
         )
         
       ),
@@ -226,11 +245,18 @@ dashboardPage(
                 box(
                   width = 6,
                   plotOutput("g2_work"),
-                  tags$p(
-                    "In term of proportion private and self-employed have the similar amount of people having a stroke. However people from the gouvernment are more likely to not have a stroke compared to both first gategories moreover chlidren are not very likekly to get a stroke. Maybe that could be explain due to the degree of pressure felt by workers"
-                  )
+                  tags$p("")
                 ),
-                
+                box(
+                  width = 6,
+                  plotOutput("g2_age"),
+                  tags$p("The older you get the higher the chance of getting stroke.")
+                ),
+                box(
+                  width = 6,
+                  plotOutput("g2_glu"),
+                  tags$p("Observations with stroke tend to have higher glucose level")
+                ),
               )),
       tabItem(
         tabName = "lr",
@@ -260,6 +286,6 @@ dashboardPage(
         )
       )
     ),
-  tags$script(src = "app.js")
+    tags$script(src = "app.js")
   )
 )
