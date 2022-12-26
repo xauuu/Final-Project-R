@@ -52,8 +52,7 @@ df_num$work_type = str_replace_all(
 )
 df_num$work_type = as.numeric(df_num$work_type)
 
-df_num$Residence_type = str_replace_all(df_num$Residence_type, c("Rural" =
-                                                                   "1", "Urban" = "2"))
+df_num$Residence_type = str_replace_all(df_num$Residence_type, c("Rural" = "1", "Urban" = "2"))
 df_num$Residence_type = as.numeric(df_num$Residence_type)
 
 df_num$stroke = as.numeric(as.character(df_num$stroke))

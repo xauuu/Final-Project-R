@@ -7,16 +7,12 @@ dashboardPage(
       menuItem("Dataset",
                tabName = "data",
                icon = icon("database")),
-      menuItem(
-        "Categorical Feature",
-        tabName = "categorial",
-        icon = icon("chart-simple")
-      ),
-      menuItem(
-        "Exploratory Data Analysis",
-        tabName = "eda",
-        icon = icon("chart-pie")
-      ),
+      menuItem("Chart",
+               tabName = "categorial",
+               icon = icon("chart-simple")),
+      menuItem("Chart 2",
+               tabName = "eda",
+               icon = icon("chart-pie")),
       menuItem(
         "Logistic Regression",
         tabName = "lr",
@@ -43,7 +39,7 @@ dashboardPage(
             class = "title",
             tags$h2("Data Analysis with R"),
             tags$h3("Topic: Stroke Analysis"),
-            tags$div("Group 11")
+            tags$div("Group 5")
           ),
           fluidRow(
             infoBox(
@@ -97,33 +93,41 @@ dashboardPage(
                      )
                    )),
           tabPanel("Data", dataTableOutput("dataT"), icon = icon("table")),
+          tabPanel("Structure",
+                   fluidRow(
+                     column(
+                       width = 12,
+                       verbatimTextOutput("structure"),
+                       tags$p("Attribute Information"),
+                       tags$ul(
+                         tags$li("gender: Male, Female"),
+                         tags$li("age: age of the patient"),
+                         tags$li(
+                           "hypertension: 0 if the patient doesn't have hypertension, 1 if the patient has hypertension"
+                         ),
+                         tags$li(
+                           "heart_disease: 0 if the patient doesn't have any heart diseases, 1 if the patient has a heart disease"
+                         ),
+                         tags$li("ever_married: No or Yes"),
+                         tags$li(
+                           "work_type: children, Govt_jov, Never_worked, Private, Self-employed"
+                         ),
+                         tags$li("Residence_type: Rural or Urban"),
+                         tags$li("avg_glucose_level: average glucose level in blood"),
+                         tags$li("bmi: body mass index"),
+                         tags$li(
+                           "smoking_status: formerly smoked, never smoked, smokes or Unknown"
+                         ),
+                         tags$li("stroke: 1 if the patient had a stroke or 0 if not")
+                       )
+                     )
+                   ),
+                   icon = icon("uncharted")),
           tabPanel(
-            "Structure",
-            fluidRow(
-              column(
-                width = 12,
-                verbatimTextOutput("structure"),
-                tags$p("Attribute Information"),
-                tags$ul(
-                  tags$li("gender: Male, Female"),
-                  tags$li("age: age of the patient"),
-                  tags$li("hypertension: 0 if the patient doesn't have hypertension, 1 if the patient has hypertension"),
-                  tags$li("heart_disease: 0 if the patient doesn't have any heart diseases, 1 if the patient has a heart disease"),
-                  tags$li("ever_married: No or Yes"),
-                  tags$li("work_type: children, Govt_jov, Never_worked, Private, Self-employed"),
-                  tags$li("Residence_type: Rural or Urban"),
-                  tags$li("avg_glucose_level: average glucose level in blood"),
-                  tags$li("bmi: body mass index"),
-                  tags$li("smoking_status: formerly smoked, never smoked, smokes or Unknown"),
-                  tags$li("stroke: 1 if the patient had a stroke or 0 if not")
-                )
-              )
-            ),
-            icon = icon("uncharted")
-          ),
-          tabPanel("Summary",
-                   verbatimTextOutput("summary"),
-                   icon = icon("pen-to-square"))
+            "Summary",
+            verbatimTextOutput("summary"),
+            icon = icon("pen-to-square")
+          )
         )
         
       ),
@@ -134,9 +138,7 @@ dashboardPage(
           box(
             width = 3,
             plotOutput("g1_gender", height = 300),
-            tags$p(
-              "There are more Female patients than Male. The one entry that was stated as Other was added to the Female section since majority are female patients."
-            )
+            tags$p("There are more Female patients than Male.")
           ),
           box(
             width = 3,
@@ -198,66 +200,57 @@ dashboardPage(
           ),
         )
       ),
-      tabItem(tabName = "eda",
-              fluidRow(
-                box(
-                  width = 6,
-                  plotOutput("g2_gender"),
-                  tags$p(
-                    "We can see from the plots that the gender is not a feature that descriminate a person having a stroke or not."
-                  )
-                ),
-                box(
-                  width = 6,
-                  plotOutput("g2_married"),
-                  tags$p(
-                    "The graphs show that married people have a higher rate of stroke than those who are not..."
-                  )
-                ),
-                box(
-                  width = 6,
-                  plotOutput("g2_residence"),
-                  tags$p(
-                    "There are not many differences in these two graphs for residence type. Perhaps, this variable can be insignificant."
-                  )
-                ),
-                box(
-                  width = 6,
-                  plotOutput("g2_hyper"),
-                  tags$p(
-                    "Blood pressure that is higher than normal is called hypertension. The graph shows that people with high blood pressure have a higher rate of stroke than people without the disease."
-                  )
-                ),
-                box(
-                  width = 6,
-                  plotOutput("g2_heart"),
-                  tags$p(
-                    "The graphs show that people with heart disease have a higher rate of stroke than people without the disease."
-                  )
-                ),
-                box(
-                  width = 6,
-                  plotOutput("g2_smoking"),
-                  tags$p(
-                    "The 'formerly smoked' and 'smokes' percentages are slightly higher in the stroke = 1 data."
-                  )
-                ),
-                box(
-                  width = 6,
-                  plotOutput("g2_work"),
-                  tags$p("")
-                ),
-                box(
-                  width = 6,
-                  plotOutput("g2_age"),
-                  tags$p("The older you get the higher the chance of getting stroke.")
-                ),
-                box(
-                  width = 6,
-                  plotOutput("g2_glu"),
-                  tags$p("Observations with stroke tend to have higher glucose level")
-                ),
-              )),
+      tabItem(
+        tabName = "eda",
+        fluidRow(
+          box(width = 6,
+              plotOutput("g2_gender"),
+              tags$p("")),
+          box(
+            width = 6,
+            plotOutput("g2_residence"),
+            tags$p(
+              "There are not many differences in these two graphs for residence type. Perhaps, this variable can be insignificant."
+            )
+          ),
+          box(
+            width = 6,
+            plotOutput("g2_married"),
+            tags$p(
+              "The graphs show that married people have a higher rate of stroke than those who are not..."
+            )
+          ),
+          box(
+            width = 6,
+            plotOutput("g2_hyper"),
+            tags$p(
+              "Blood pressure that is higher than normal is called hypertension. The graph shows that people with high blood pressure have a higher rate of stroke than people without the disease."
+            )
+          ),
+          box(
+            width = 6,
+            plotOutput("g2_heart"),
+            tags$p(
+              "The graphs show that people with heart disease have a higher rate of stroke than people without the disease."
+            )
+          ),
+          box(
+            width = 6,
+            plotOutput("g2_smoking"),
+            tags$p(
+              "The 'formerly smoked' and 'smokes' percentages are slightly higher in the stroke = 1 data."
+            )
+          ),
+          box(width = 6,
+              plotOutput("g2_work"),
+              tags$p("")),
+          box(
+            width = 6,
+            plotOutput("g2_age"),
+            tags$p("The older you get the higher the chance of getting stroke.")
+          ),
+        )
+      ),
       tabItem(
         tabName = "lr",
         h2("Logistic Regression"),

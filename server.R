@@ -482,4 +482,29 @@ function(input, output) {
     perf <- performance(pred, "tpr", "fpr")
     plot(perf, colorize = TRUE)
   })
+  
+  data <- reactive({
+    data.frame(
+      gender = as.numeric(input$gender),
+      age = as.numeric(input$age),
+      hypertension = as.numeric(input$hypertension),
+      heart_disease = as.numeric(input$heart_disease),
+      ever_married = as.numeric(input$ever_married),
+      work_type = as.numeric(input$work_type),
+      Residence_type = as.numeric(input$Residence_type),
+      avg_glucose_level = as.numeric(input$avg_glucose_level),
+      bmi = as.numeric(input$bmi),
+      smoking_status = as.numeric(input$smoking_status)
+    )
+  })
+  
+  observeEvent(input$predict, {
+    output$xau <- renderPrint({
+      #predict(model, data(), type = 'response')
+      predict(model, head(df_num, 1), type = 'response')
+      head(df_num, 1)
+    })
+  })
+  
+  
 }
